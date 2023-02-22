@@ -1,14 +1,21 @@
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from 'src/styles/ThemeProvider';
+import { store } from 'src/store/store';
 import { App } from './App';
 
 describe('App', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(<App />);
-    expect(baseElement).toBeTruthy();
-  });
+  test('renders header and todos components', () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </Provider>
+    );
 
-  it('should have a greeting as the title', () => {
-    const { getByText } = render(<App />);
-    expect(getByText(/Welcome todo/gi)).toBeTruthy();
+    expect(getByTestId('header')).toBeInTheDocument();
+    expect(getByTestId('todos')).toBeInTheDocument();
   });
 });
