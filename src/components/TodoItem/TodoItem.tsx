@@ -15,6 +15,8 @@ import {
   RemoveIcon,
   SaveEditIcon,
 } from 'src/assets/Icons';
+import { toast } from 'react-toastify';
+import { toastConfig } from 'src/styles/config';
 
 interface TodoItemProps {
   todo: TodoItemType;
@@ -32,19 +34,36 @@ export const TodoItem = ({
   const inputRef = useRef<HTMLInputElement>(null); // Create a reference to the input element
   const [newItem, setNewItem] = useState<string>(item);
 
-  const handleEditClick = (id: number) => {
-    dispatch(toggleEditMode(id));
-    setIsEditClicked(true);
+  const handleEditClick = () => {
+    if (!isDisabled) {
+      dispatch(toggleEditMode(id));
+      setIsEditClicked(true);
+    }
   };
 
-  const handleSaveEditClick = (id: number) => {
+  const handleSaveEditClick = () => {
     dispatch(editTodo({ id, newItem }));
     setIsEditClicked(false);
+    toast('Task was updated successfully!', toastConfig);
   };
 
   const handleItemChange = (ev: ChangeEvent<HTMLInputElement>): void => {
     const { value } = ev.target;
     setNewItem(value);
+  };
+
+  const handleCompletedClick = () => {
+    if (!isDisabled) {
+      dispatch(completeTodo(id));
+      toast('Task was completed successfully!', toastConfig);
+    }
+  };
+
+  const handleRemoveClick = () => {
+    if (!isDisabled) {
+      dispatch(removeTodo(id));
+      toast('Task was removed successfully!', toastConfig);
+    }
   };
 
   useEffect(() => {
@@ -70,24 +89,22 @@ export const TodoItem = ({
         onChange={handleItemChange}
       />
       {editMode ? (
-        <IconButton onClick={() => handleSaveEditClick(id)}>
+        <IconButton onClick={handleSaveEditClick}>
           <SaveEditIcon />
         </IconButton>
       ) : (
         <IconsContainer>
           {!completed && (
             <>
-              <IconButton
-                onClick={() => !isDisabled && dispatch(completeTodo(id))}
-              >
+              <IconButton onClick={handleCompletedClick}>
                 <CompletedIcon />
               </IconButton>
-              <IconButton onClick={() => !isDisabled && handleEditClick(id)}>
+              <IconButton onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </>
           )}
-          <IconButton onClick={() => !isDisabled && dispatch(removeTodo(id))}>
+          <IconButton onClick={handleRemoveClick}>
             <RemoveIcon />
           </IconButton>
         </IconsContainer>
