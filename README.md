@@ -1,6 +1,6 @@
 # Todo List App
 
-✨ **This is a simple Todo List app built with React.** ✨
+✨ **This is a Todo List app built with React.** ✨
 
 ## Installation
 
@@ -8,9 +8,9 @@
 
 2. Install dependencies: cd todo && npm install
 
-Start the app: npm start
+3. Start the app: npm start
 
-Open the app in your browser: http://localhost:3000
+4. Open the app in your browser: http://localhost:3000
 
 ## Usage
 
