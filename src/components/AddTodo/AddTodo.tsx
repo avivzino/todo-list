@@ -1,11 +1,14 @@
 import { ChangeEvent, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addTodo } from 'src/store/reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { GenericButton } from 'src/common';
+import { addTodo, getTodos } from 'src/store/reducer';
+import { Color, theme as styledTheme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 export const AddTodo = () => {
   const dispatch = useDispatch();
   const [item, setItem] = useState<string>('');
+  const todos = useSelector(getTodos);
 
   const handleItemChange = (ev: ChangeEvent<HTMLInputElement>): void => {
     const { value } = ev.target;
@@ -14,27 +17,34 @@ export const AddTodo = () => {
 
   const handleAddTodo = () => {
     if (item !== '') {
-      dispatch(
-        addTodo({
-          id: Math.floor(Math.random() * 1000),
-          item,
-          completed: false,
-          editMode: false,
-        })
-      );
+      const id = Math.floor(Math.random() * 1000);
+      const newItem = {
+        id,
+        item,
+        completed: false,
+        editMode: false,
+      };
+      dispatch(addTodo(newItem));
+      const updatedTodos = [...todos, newItem];
+      localStorage.setItem('todos', JSON.stringify(updatedTodos));
       setItem('');
     }
   };
 
   return (
-    <Wrapper>
+    <AddTodoWrapper>
       <ItemInput value={item} onChange={handleItemChange} />
-      <AddTodoButton onClick={handleAddTodo}>Add Item</AddTodoButton>
-    </Wrapper>
+      <GenericButton
+        onClick={handleAddTodo}
+        text="Add a Todo"
+        width="8rem"
+        hoverColor={styledTheme.colors.darkBlue as Color}
+      />
+    </AddTodoWrapper>
   );
 };
 
-const Wrapper = styled.div`
+const AddTodoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -48,27 +58,8 @@ const ItemInput = styled.input`
   color: ${({ theme }) => theme.colors.blue};
   font-family: Sans-serif;
   border: none;
-  width: 83%;
+  width: 80%;
   height: 1.3rem;
   padding: 0.3rem;
   border-radius: 0.5rem;
-`;
-
-const AddTodoButton = styled.div`
-  font-size: ${({ theme }) => theme.textSizes.s}rem;
-  font-family: Sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 17%;
-  border-left: 0.2rem solid ${({ theme }) => theme.colors.lightBlue};
-  background-color: ${({ theme }) => theme.colors.blue};
-  color: ${({ theme }) => theme.colors.lightBlue};
-  padding: 0.3rem;
-  height: 1.3rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  &:hover {
-    color: white;
-  }
 `;

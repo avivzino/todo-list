@@ -1,9 +1,10 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
   completeTodo,
   editTodo,
+  getTodos,
   removeTodo,
   toggleEditMode,
 } from 'src/store/reducer';
@@ -18,13 +19,16 @@ import {
 interface TodoItemProps {
   todo: TodoItemType;
   setIsEditClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  isDisabled: boolean;
 }
 
 export const TodoItem = ({
   todo: { id, item, editMode, completed },
   setIsEditClicked,
+  isDisabled,
 }: TodoItemProps) => {
   const dispatch = useDispatch();
+  const todos = useSelector(getTodos);
   const inputRef = useRef<HTMLInputElement>(null); // Create a reference to the input element
   const [newItem, setNewItem] = useState<string>(item);
 
@@ -33,8 +37,8 @@ export const TodoItem = ({
     setIsEditClicked(true);
   };
 
-  const handleSaveEditClick = (id: number, content: string) => {
-    dispatch(editTodo({ id, newItem: content }));
+  const handleSaveEditClick = (id: number) => {
+    dispatch(editTodo({ id, newItem }));
     setIsEditClicked(false);
   };
 
@@ -50,6 +54,12 @@ export const TodoItem = ({
     }
   }, [editMode]);
 
+  useEffect(() => {
+    if (todos) {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+  }, [todos]);
+
   return (
     <>
       <TodoText
@@ -60,7 +70,7 @@ export const TodoItem = ({
         onChange={handleItemChange}
       />
       {editMode ? (
-        <IconButton onClick={() => handleSaveEditClick(id, item)}>
+        <IconButton onClick={() => handleSaveEditClick(id)}>
           <SaveEditIcon />
         </IconButton>
       ) : (
@@ -68,16 +78,16 @@ export const TodoItem = ({
           {!completed && (
             <>
               <IconButton
-                onClick={() => !completed && dispatch(completeTodo(id))}
+                onClick={() => !isDisabled && dispatch(completeTodo(id))}
               >
                 <CompletedIcon />
               </IconButton>
-              <IconButton onClick={() => handleEditClick(id)}>
+              <IconButton onClick={() => !isDisabled && handleEditClick(id)}>
                 <EditIcon />
               </IconButton>
             </>
           )}
-          <IconButton onClick={() => dispatch(removeTodo(id))}>
+          <IconButton onClick={() => !isDisabled && dispatch(removeTodo(id))}>
             <RemoveIcon />
           </IconButton>
         </IconsContainer>
@@ -88,7 +98,8 @@ export const TodoItem = ({
 
 const TodoText = styled.input<{ isCompleted: boolean }>`
   font-size: ${({ theme }) => theme.textSizes.m}rem;
-  color: ${({ theme }) => theme.colors.blue};
+  color: ${({ theme, isCompleted }) =>
+    isCompleted ? theme.colors.lightBlue : theme.colors.blue};
   font-family: Sans-serif;
   text-decoration: ${({ isCompleted }) =>
     isCompleted ? 'line-through' : 'none'};
