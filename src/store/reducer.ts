@@ -14,16 +14,10 @@ const todosReducer = createSlice({
       state.todos.push(action.payload);
     },
     completeTodo: (state, action: PayloadAction<number>) => {
-      const todoItemIndex = state.todos.findIndex(
-        (item) => item.id === action.payload
-      );
-      if (todoItemIndex !== -1) {
-        // Remove the completed item from its current position
-        const completedTodo = state.todos.splice(todoItemIndex, 1)[0];
-        // Add the completed item to the end of the array
-        state.todos.push(completedTodo);
+      const todoItem = state.todos.find((item) => item.id === action.payload);
+      if (todoItem) {
         // Update its completion status
-        completedTodo.completed = true;
+        todoItem.completed = true;
       }
     },
     toggleEditMode: (state, action: PayloadAction<number>) => {
@@ -48,11 +42,28 @@ const todosReducer = createSlice({
       // Remove the todo item from the state by filtering out any items with the matching id
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
     },
+    setTodosFromLocalStorage: (state) => {
+      const storedTodos = localStorage.getItem('todos');
+      if (storedTodos) {
+        state.todos = JSON.parse(storedTodos);
+      }
+    },
+    clearList: (state) => {
+      state.todos = [];
+      localStorage.removeItem('todos');
+    },
   },
 });
 
 export const getTodos = (state: ReducerState) => state.todos;
 
-export const { addTodo, completeTodo, removeTodo, toggleEditMode, editTodo } =
-  todosReducer.actions;
+export const {
+  addTodo,
+  completeTodo,
+  removeTodo,
+  toggleEditMode,
+  editTodo,
+  setTodosFromLocalStorage,
+  clearList,
+} = todosReducer.actions;
 export const reducer = todosReducer.reducer;
