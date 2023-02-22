@@ -9,7 +9,9 @@ export const theme = {
     lightBlue: '#a8dadc',
     blue: '#457b9d',
     darkBlue: '#1d3557',
+    red: '#e63946',
   },
 };
 
 export type Theme = typeof theme;
+export type Color = keyof typeof theme.colors;
