@@ -1,11 +1,11 @@
 export const EditIcon = () => {
   return (
     <svg width="33px" height="33px" viewBox="0 0 1024 1024" fill="#a8dadc">
-      <g id="SVGRepo_bgCarrier" stroke-width="0" />
+      <g id="SVGRepo_bgCarrier" />
       <g
         id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <g id="SVGRepo_iconCarrier">
         <path
