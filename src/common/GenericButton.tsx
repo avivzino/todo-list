@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { Color } from 'src/styles/theme';
 
 interface GenericButtonProps {
   onClick: () => void;
   text: string;
   width?: string;
-  hoverColor?: Color;
+  hoverColor?: string;
   isBorder?: boolean;
 }
 
@@ -28,7 +27,7 @@ export const GenericButton = ({
 
 const StyledGenericButton = styled.div<{
   width?: string;
-  hoverColor?: Color;
+  hoverColor?: string;
   isBorder?: boolean;
 }>`
   color: ${({ theme }) => theme.colors.lightBlue};

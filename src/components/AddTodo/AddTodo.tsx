@@ -10,7 +10,7 @@ export const AddTodo = () => {
   const [item, setItem] = useState<string>('');
   const todos = useSelector(getTodos);
 
-  const handleItemChange = (ev: ChangeEvent<HTMLInputElement>): void => {
+  const handleItemChange = (ev: ChangeEvent<HTMLInputElement>) => {
     const { value } = ev.target;
     setItem(value);
   };

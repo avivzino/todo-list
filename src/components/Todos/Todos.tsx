@@ -10,6 +10,7 @@ export const Todos = () => {
   const [isEditClicked, setIsEditClicked] = useState<boolean>(false);
 
   useEffect(() => {
+    //TODO : console log and check when its happening
     dispatch(setTodosFromLocalStorage());
   }, [dispatch]);
 

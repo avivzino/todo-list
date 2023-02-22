@@ -66,4 +66,5 @@ export const {
   setTodosFromLocalStorage,
   clearList,
 } = todosReducer.actions;
+
 export const reducer = todosReducer.reducer;

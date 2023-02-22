@@ -2,12 +2,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { clearList, getTodos } from 'src/store/reducer';
 import { GenericButton } from 'src/common';
-import { Color, theme as styledTheme } from 'src/styles/theme';
+import { theme as styledTheme } from 'src/styles/theme';
 
 export const Footer = () => {
   const dispatch = useDispatch();
   const todos = useSelector(getTodos);
-  console.log(todos);
 
   return (
     <FooterWrapper>
@@ -16,7 +15,7 @@ export const Footer = () => {
           onClick={() => dispatch(clearList())}
           text="Clear my list!"
           width="13rem"
-          hoverColor={styledTheme.colors.red as Color}
+          hoverColor={styledTheme.colors.red}
           isBorder
         />
       )}
