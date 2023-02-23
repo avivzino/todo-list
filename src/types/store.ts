@@ -1,8 +1,8 @@
 export interface TodoItemType {
   id: number;
   item: string;
-  completed: boolean;
-  editMode: boolean;
+  isCompleted: boolean;
+  isEditMode: boolean;
 }
 
 export interface ReducerState {

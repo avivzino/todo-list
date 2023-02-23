@@ -4,20 +4,19 @@ import styled, { keyframes } from 'styled-components';
 import { getTodos, setTodosFromLocalStorage } from 'src/store/reducer';
 import { TodoItem } from '../TodoItem';
 
-export const Todos = () => {
+export const Todos = (): JSX.Element => {
   const dispatch = useDispatch();
   const todos = useSelector(getTodos);
   const [isEditClicked, setIsEditClicked] = useState<boolean>(false);
 
   useEffect(() => {
-    //TODO : console log and check when its happening
     dispatch(setTodosFromLocalStorage());
   }, [dispatch]);
 
   return (
     <TodosWrapper data-testid="todos">
       {todos.map((todo) => {
-        const isDisabled = isEditClicked && !todo.editMode;
+        const isDisabled = isEditClicked && !todo.isEditMode;
         return (
           <TodoContainer key={todo.id} isDisabled={isDisabled}>
             <TodoItem
@@ -35,7 +34,8 @@ export const Todos = () => {
 const TodosWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1rem 30%;
+  width: 50%;
+  align-self: center;
 `;
 
 const TodoContainer = styled.div<{ isDisabled: boolean }>`

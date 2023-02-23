@@ -2,14 +2,12 @@ import { fadeIn } from 'react-animations';
 import styled, { keyframes } from 'styled-components';
 import { AddTodo } from '../AddTodo';
 
-export const Header = () => {
-  return (
-    <HeaderWrapper data-testid="header">
-      <TitleText>THINGS TO DO:</TitleText>
-      <AddTodo data-testid="add-todo" />
-    </HeaderWrapper>
-  );
-};
+export const Header = (): JSX.Element => (
+  <HeaderWrapper data-testid="header">
+    <TitleText>THINGS TO DO:</TitleText>
+    <AddTodo data-testid="add-todo" />
+  </HeaderWrapper>
+);
 
 const HeaderWrapper = styled.div`
   display: flex;

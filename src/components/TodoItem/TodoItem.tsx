@@ -25,23 +25,23 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({
-  todo: { id, item, editMode, completed },
+  todo: { id, item, isEditMode, isCompleted },
   setIsEditClicked,
   isDisabled,
-}: TodoItemProps) => {
+}: TodoItemProps): JSX.Element => {
   const dispatch = useDispatch();
   const todos = useSelector(getTodos);
   const inputRef = useRef<HTMLInputElement>(null); // Create a reference to the input element
   const [newItem, setNewItem] = useState<string>(item);
 
-  const handleEditClick = () => {
+  const handleEditClick = (): void => {
     if (!isDisabled) {
       dispatch(toggleEditMode(id));
       setIsEditClicked(true);
     }
   };
 
-  const handleSaveEditClick = () => {
+  const handleSaveEditClick = (): void => {
     dispatch(editTodo({ id, newItem }));
     setIsEditClicked(false);
     toast('Task was updated successfully!', toastConfig);
@@ -52,26 +52,34 @@ export const TodoItem = ({
     setNewItem(value);
   };
 
-  const handleCompletedClick = () => {
+  const handleCompletedClick = (): void => {
     if (!isDisabled) {
       dispatch(completeTodo(id));
       toast('Task was completed successfully!', toastConfig);
     }
   };
 
-  const handleRemoveClick = () => {
+  const handleRemoveClick = (): void => {
     if (!isDisabled) {
       dispatch(removeTodo(id));
       toast('Task was removed successfully!', toastConfig);
     }
   };
 
+  const handleDisableInput = (
+    e: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ): void => {
+    if (!isEditMode) {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     // Focus the input field when edit mode is enabled
-    if (inputRef.current && editMode) {
+    if (inputRef.current && isEditMode) {
       inputRef.current.focus();
     }
-  }, [editMode]);
+  }, [isEditMode]);
 
   useEffect(() => {
     if (todos) {
@@ -84,17 +92,17 @@ export const TodoItem = ({
       <TodoText
         ref={inputRef}
         value={newItem}
-        isCompleted={!!completed}
-        onMouseDown={(e) => !editMode && e.preventDefault()}
+        isCompleted={!!isCompleted}
+        onMouseDown={handleDisableInput}
         onChange={handleItemChange}
       />
-      {editMode ? (
+      {isEditMode ? (
         <IconButton onClick={handleSaveEditClick}>
           <SaveEditIcon />
         </IconButton>
       ) : (
         <IconsContainer>
-          {!completed && (
+          {!isCompleted && (
             <>
               <IconButton onClick={handleCompletedClick}>
                 <CompletedIcon />
@@ -122,6 +130,7 @@ const TodoText = styled.input<{ isCompleted: boolean }>`
     isCompleted ? 'line-through' : 'none'};
   border: none;
   background-color: transparent;
+  width: 100%;
 `;
 
 const IconsContainer = styled.div`

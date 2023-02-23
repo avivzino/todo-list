@@ -4,15 +4,19 @@ import { clearList, getTodos } from 'src/store/reducer';
 import { GenericButton } from 'src/common';
 import { theme as styledTheme } from 'src/styles/theme';
 
-export const Footer = () => {
+export const Footer = (): JSX.Element => {
   const dispatch = useDispatch();
   const todos = useSelector(getTodos);
+
+  const handleClearList = (): void => {
+    dispatch(clearList());
+  };
 
   return (
     <FooterWrapper>
       {todos.length > 0 && (
         <GenericButton
-          onClick={() => dispatch(clearList())}
+          onClick={handleClearList}
           text="Clear my list!"
           width="13rem"
           hoverColor={styledTheme.colors.red}

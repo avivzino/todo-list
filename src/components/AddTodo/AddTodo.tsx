@@ -2,27 +2,27 @@ import { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GenericButton } from 'src/common';
 import { addTodo, getTodos } from 'src/store/reducer';
-import { Color, theme as styledTheme } from 'src/styles/theme';
+import { theme as styledTheme } from 'src/styles/theme';
 import styled from 'styled-components';
 
-export const AddTodo = () => {
+export const AddTodo = (): JSX.Element => {
   const dispatch = useDispatch();
   const [item, setItem] = useState<string>('');
   const todos = useSelector(getTodos);
 
-  const handleItemChange = (ev: ChangeEvent<HTMLInputElement>) => {
+  const handleItemChange = (ev: ChangeEvent<HTMLInputElement>): void => {
     const { value } = ev.target;
     setItem(value);
   };
 
-  const handleAddTodo = () => {
+  const handleAddTodo = (): void => {
     if (item !== '') {
       const id = Math.floor(Math.random() * 1000);
       const newItem = {
         id,
         item,
-        completed: false,
-        editMode: false,
+        isCompleted: false,
+        isEditMode: false,
       };
       dispatch(addTodo(newItem));
       const updatedTodos = [...todos, newItem];
@@ -38,7 +38,7 @@ export const AddTodo = () => {
         onClick={handleAddTodo}
         text="Add a Todo"
         width="8rem"
-        hoverColor={styledTheme.colors.darkBlue as Color}
+        hoverColor={styledTheme.colors.darkBlue}
       />
     </AddTodoWrapper>
   );
@@ -48,7 +48,7 @@ const AddTodoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 35%;
+  width: 45%;
   border: 0.2rem solid ${({ theme }) => theme.colors.lightBlue};
   border-radius: 0.5rem;
 `;
